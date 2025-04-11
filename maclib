@@ -59,6 +59,7 @@ local function GetGui()
 		or (cloneref and cloneref(MacLib.GetService("CoreGui")) or MacLib.GetService("CoreGui"))
 
 	newGui.Parent = parent
+        newGui.Name = "MaclibGui"
 	return newGui
 end
 
