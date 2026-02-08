@@ -1742,9 +1742,9 @@ function MacLib:Window(Settings)
         if isCollapsible then
             headerButton.MouseButton1Click:Connect(function()
                 groupExpanded = not groupExpanded
-                Tween(arrowLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
-                    Rotation = groupExpanded and 90 or 0
-                }):Play()
+				TweenService:Create(arrowLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+				    Rotation = groupExpanded and 90 or 0
+				}):Play()
                 for _, tabFrame in ipairs(collapsibleTabFrames) do
                     tabFrame.Visible = groupExpanded
                 end
