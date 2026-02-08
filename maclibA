@@ -1647,13 +1647,9 @@ function MacLib:Window(Settings)
 		uIPadding1.Name = "UIPadding"
 		uIPadding1.PaddingBottom = UDim.new(0, 15)
 		uIPadding1.Parent = sectionTabSwitchers
- local uIPadding1 = Instance.new("UIPadding")
-    uIPadding1.Name = "UIPadding"
-    uIPadding1.PaddingBottom = UDim.new(0, 15)
-    uIPadding1.Parent = sectionTabSwitchers
 
     local isCollapsible = GroupSettings.Collapsible and GroupSettings.Name
-    local groupExpanded = true6u5
+    local groupExpanded = true
     local collapsibleTabFrames = {}
 
     if GroupSettings.Name then
@@ -1799,7 +1795,6 @@ function MacLib:Window(Settings)
 		        table.insert(collapsibleTabFrames, tabSwitcher)
 		    end
 		
-		    local tabSwitcherUICorner = Instance.new("UICorner")
 
 			local tabSwitcherUICorner = Instance.new("UICorner")
 			tabSwitcherUICorner.Name = "TabSwitcherUICorner"
