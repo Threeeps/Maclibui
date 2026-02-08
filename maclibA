@@ -1649,7 +1649,7 @@ function MacLib:Window(Settings)
 		uIPadding1.Parent = sectionTabSwitchers
 
     local isCollapsible = GroupSettings.Collapsible and GroupSettings.Name
-    local groupExpanded = true
+   	local groupExpanded = not (GroupSettings.DefaultCollapsed == true)
     local collapsibleTabFrames = {}
 
     if GroupSettings.Name then
@@ -1683,9 +1683,13 @@ function MacLib:Window(Settings)
             arrowLabel.BorderSizePixel = 0
             arrowLabel.Size = UDim2.fromOffset(10, 14)
             arrowLabel.LayoutOrder = 0
-            arrowLabel.Rotation = 90
-            arrowLabel.Parent = headerButton
-        end
+			arrowLabel.Rotation = 90
+			arrowLabel.Parent = headerButton
+			end
+			
+			if not groupExpanded and arrowLabel then
+			    arrowLabel.Rotation = 0
+			end
 
         if GroupSettings.Icon then
             local groupIcon = Instance.new("ImageLabel")
@@ -1754,6 +1758,11 @@ function MacLib:Window(Settings)
 
     sectionTabSwitchers.Parent = tabGroup
     tabGroup.Parent = tabSwitchersScrollingFrame
+	if not groupExpanded then
+	    for _, tabFrame in ipairs(collapsibleTabFrames) do
+	        tabFrame.Visible = false
+	    end
+	end
 
 		function SectionFunctions:Tab(Settings)
 			local TabFunctions = {Settings = Settings}
