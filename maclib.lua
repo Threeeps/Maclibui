@@ -5713,49 +5713,80 @@ function MacLib:Window(Settings)
 				return SectionFunctions
 			end
 
-			sectionTabSwitchers.Parent = tabGroup
-		    tabGroup.Parent = tabSwitchersScrollingFrame
-		
-		    -- Register this group for accordion behavior
-		    local groupData = {
-		        expanded = groupExpanded,
-		        collapsible = isCollapsible,
-		        tabFrames = collapsibleTabFrames,
-		        arrowLabel = nil, -- will be set below if collapsible
-		        setExpanded = function(state)
-		            groupExpanded = state
-		        end
-		    }
-		
-		    if isCollapsible then
-		        -- Store arrow reference for external collapse/expand
-		        for _, child in ipairs(sectionTabSwitchers:GetChildren()) do
-		            if child.Name == "GroupHeader" then
-		                for _, sub in ipairs(child:GetChildren()) do
-		                    if sub.Name == "Arrow" then
-		                        groupData.arrowLabel = sub
-		                        break
-		                    end
-		                end
-		                break
-		            end
-		        end
-		        table.insert(allTabGroups, groupData)
-		    end
-		
-		    if not groupExpanded then
-		        for _, tabFrame in ipairs(collapsibleTabFrames) do
-		            tabFrame.Visible = false
-		        end
-		    end
 
-			tabSwitcher.MouseButton1Click:Connect(function()
-				SelectCurrentTab()
-			end)
+			local function SelectThisTab()
 
-			function TabFunctions:Select()
-				SelectCurrentTab()
-			end
+			                for switcherBtn, tabData in pairs(tabs) do
+			                    local isSelected = (switcherBtn == tabSwitcher)
+			
+			                    tabData.tabContent.Visible = isSelected
+			                    tabData.tabContent.Parent = content
+			
+			   
+			                    Tween(tabData.tabStroke, TweenInfo.new(0.2, Enum.EasingStyle.Sine), {
+			                        Transparency = isSelected and 0.9 or 1
+			                    }):Play()
+			
+			             
+			                    if tabData.switcherImage then
+			                        Tween(tabData.switcherImage, TweenInfo.new(0.2, Enum.EasingStyle.Sine), {
+			                            ImageTransparency = isSelected and 0 or 0.5
+			                        }):Play()
+			                    end
+			
+			              
+			                    Tween(tabData.switcherName, TweenInfo.new(0.2, Enum.EasingStyle.Sine), {
+			                        TextTransparency = isSelected and 0.1 or 0.5
+			                    }):Play()
+			                end
+			
+		
+			                currentTab.Text = Settings.Name
+			
+			                for _, group in ipairs(allTabGroups) do
+			                    local isThisGroup = false
+			                    for _, tabFrame in ipairs(group.tabFrames) do
+			                        if tabFrame == tabSwitcher then
+			                            isThisGroup = true
+			                            break
+			                        end
+			                    end
+			
+			                    if isThisGroup and group.collapsible then
+			      
+			                        group.setExpanded(true)
+			                        group.expanded = true
+			                        for _, tabFrame in ipairs(group.tabFrames) do
+			                            tabFrame.Visible = true
+			                        end
+			                        if group.arrowLabel then
+			                            TweenService:Create(group.arrowLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+			                                Rotation = 90
+			                            }):Play()
+			                        end
+			                    elseif group.collapsible then
+			                     
+			                        group.setExpanded(false)
+			                        group.expanded = false
+			                        for _, tabFrame in ipairs(group.tabFrames) do
+			                            tabFrame.Visible = false
+			                        end
+			                        if group.arrowLabel then
+			                            TweenService:Create(group.arrowLabel, TweenInfo.new(0.2, Enum.EasingStyle.Quint), {
+			                                Rotation = 0
+			                            }):Play()
+			                        end
+			                    end
+			                end
+			            end
+			
+			            tabSwitcher.MouseButton1Click:Connect(function()
+			                SelectThisTab()
+			            end)
+			
+			            function TabFunctions:Select()
+			                SelectThisTab()
+			            end
 
 			function TabFunctions:InsertConfigSection(Side)
 				local configSection = TabFunctions:Section({ Side = "Left" })
