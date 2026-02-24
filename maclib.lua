@@ -5727,7 +5727,7 @@ function MacLib:Window(Settings)
 		        end
 		    }
 		
-		    sible then
+		    if isCollapsible then
 		        -- Store arrow reference for external collapse/expand
 		        for _, child in ipairs(sectionTabSwitchers:GetChildren()) do
 		            if child.Name == "GroupHeader" then
